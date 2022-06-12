@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LifeCoach Homepage</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+	
+		<div class="container">
+			<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+			  <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+				<img style="width:100%;" src="{{url_for('static', filename='lc_logo.png')}}">
+			  </a>
+
+			  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+				
+			  </ul>
+
+			  <div class="col-md-3 text-end">
+				<form action="/logout" method="POST">
+					<button type="submit" class="btn btn-outline-primary me-2">Logout</button>
+				</form>
+			  </div>
+			</header>
+		  </div>
+		  
+		{% if user_email %}
+		  
+		<div style="margin:auto;width:100%;max-width:800px;">
+			<h1>Coaches</h1>
+			{% if coaches != None %}
+			{% for coach in coaches %}
+				<div class="card" style="width: 100%;text-align:center;margin:10px;">
+					<div class="card-body">
+						<h5 class="card-title">{{ coach[1] }}</h5>
+						<form method="POST" action="/request">
+							<input type="hidden" name="coach_id" value="{{ coach[0] }}">
+							<input type="hidden" name="user_email" value="{{ user_email }}">
+							<button class="btn btn-primary" type="submit">Message</button>
+						</form>
+					</div>
+				</div>
+			{% endfor %}
+			{% endif %}
+		
+		</div>
+		
+		{% endif %}
+		
+		
+		{% if coach_email %}
+			<div style="margin:auto;width:100%;max-width:800px;">
+				<h1>Requests</h1>
+				{% if requests != None %}
+				{% for request in requests %}
+					<div class="card" style="width: 100%;text-align:center;margin:10px;">
+						<div class="card-body">
+							<h5 class="card-title">{{ request[2] }}</h5>
+							<form method="GET" action="/message">
+								<input type="hidden" name="receiver" value="{{ coach_id }}">
+								<input type="hidden" name="sender" value="{{ request[1] }}">
+								<button class="btn btn-primary" type="submit">Message</button>
+							</form>
+						</div>
+					</div>
+				{% endfor %}
+				{% endif %}
+		{% endif %}
+	
+	</body>
+</html>
